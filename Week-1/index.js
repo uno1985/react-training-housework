@@ -2,13 +2,13 @@
 const { useState } = React;
 
 function App() {
-  const [tempProduct, setTempProduct] = useState();
-  const [mainIamges, setMainIamges] = useState();
+  const [tempProduct, setTempProduct] = useState(null);
+  const [mainImage, setMainImage] = useState("");
 
   //同時更新查看細節 及 主圖狀態
   const viewDetail = (item) => {
     setTempProduct(item);
-    setMainIamges(item.imageUrl);
+    setMainImage(item.imageUrl);
   };
 
   // 產品資料載入
@@ -109,7 +109,7 @@ function App() {
           <h2 className="fw-bold">產品詳細簡介</h2>
           {tempProduct ? (
             <div className="card">
-              <img src={mainIamges} style={{ height: "300px" }} alt="主圖" />
+              <img src={mainImage} style={{ height: "300px" }} alt="主圖" />
               <div className="card-body">
                 <h5 className="card-title fw-bold">{tempProduct.title}</h5>
                 <span className="badge bg-danger ms-2">
@@ -131,7 +131,7 @@ function App() {
                       key={index}
                       src={url}
                       style={{ height: "120px", marginRight: "5px" }}
-                      onClick={() => setMainIamges(url)}
+                      onClick={() => setMainImage(url)}
                       alt="其他圖片"
                     />
                   ))}
