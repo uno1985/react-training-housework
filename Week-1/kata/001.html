@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+
+    <body>
+
+        <div id="app">
+            <ul></ul>
+        </div>
+        <input type="text" id="inputByAdd">
+        <button type="button" id="buttonByAdd">新增</button>
+        <script>
+        // 資料
+
+        const data = [
+            {
+                id: 1,
+                content: '我是卡斯伯'
+            },
+            {
+                id: 2,
+                content: '我是小明'
+            }
+        ];
+
+
+        let num = data.length;
+        
+        
+        const inputByAdd = document.querySelector('#inputByAdd');
+        const buttonByAdd = document.querySelector('#buttonByAdd');
+        const app = document.querySelector('#app ul');
+        
+        
+        // 按下按鈕新增
+        buttonByAdd.addEventListener('click',function(){
+            const val = inputByAdd.value;
+            inputByAdd.value = '';
+            console.log(val);
+            addItem(val);
+        });
+
+        // 渲染練習
+        function render() {
+            let template = '';
+            data.forEach((item) => {template += `<li>${item.content}
+            <button type="button" class="btnRemove" data-id="${item.id}">刪除</button></li>`});
+            app.innerHTML = template;
+
+            const btnsForRemove = document.querySelectorAll('.btnRemove');
+            btnsForRemove.forEach(btn =>{
+                btn.addEventListener('click',function(evt){
+                    const id = Number.parseInt(evt.target.dataset.id)
+                    removeItem(id);
+                })
+            } )
+        }
+
+
+        // 新增練習
+        function addItem(content) {
+            num++;
+            data.push({
+                id: num,
+                content,
+            })
+            render();
+        }
+
+        // 移除練習
+        function removeItem(id) {
+            const index = data.findIndex((item) => item.id === id);
+            data.splice(index, 1);
+            console.log(data);
+            render();
+
+        }
+
+        // 初始化渲染
+        render()
+
+
+
+
+    </script>
+    </body>
+
+</html>
