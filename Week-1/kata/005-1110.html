@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+
+    <body>
+        <div id="app">
+            <ul></ul>
+        </div>
+        <input type="text" id="inputByAdd" />
+        <button type="button" id="buttonByAdd">新增</button>
+        <script>
+        // 資料
+        const data = [
+            {
+                id: 1,
+                content: "我是卡斯伯",
+            },
+            {
+                id: 2,
+                content: "我是小明",
+            },
+        ];
+
+        let num = data.length;
+        const inputByAdd = document.querySelector('#inputByAdd');
+        const buttonByAdd = document.querySelector('#buttonByAdd');
+        const app = document.querySelector('#app ul');
+
+        buttonByAdd.addEventListener('click',function(){
+            const val = inputByAdd.value;
+            inputByAdd.value = '';
+            addItem(val);
+        })
+
+        function render(){
+            app.innerHTML = data.map(item => `<li>${item.content}
+            <button type="button" class="btnRemove" data-id=${item.id}>刪除</button></li>`).join('');
+
+            const btnForRemove = document.querySelectorAll('.btnRemove');
+            btnForRemove.forEach(btn=>{
+                btn.addEventListener('click',function(e){
+                    const id = Number.parseInt(e.target.dataset.id)
+                    removeItem(id);
+                })
+            })
+        }
+        render()
+
+        function removeItem(id){
+            const index = data.findIndex(item => item.id === id);
+            data.splice(index, 1);
+            render()
+        }
+        
+
+        function addItem(content){
+            num++;
+            data.push({
+                id:num,
+                content,
+            })
+            render()
+        }
+        
+       
+
+
+    </script>
+    </body>
+
+</html>
