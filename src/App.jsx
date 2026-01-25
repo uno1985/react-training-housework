@@ -1,19 +1,19 @@
-
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./assets/style.css";
 import * as bootstrap from "bootstrap";
+import ProductModal from "./component/ProductModal";
+import Loading from "./component/Loading";
+import Footer from "./component/Footer";
+import Pagination from "./component/Pagination";
+
 
 
 //引入env設置
 const API_BASE = import.meta.env.VITE_API_BASE;
 const API_PATH = import.meta.env.VITE_API_PATH;
 
-
 let errorTimer;
-
-
-
 
 const initialProduct = {
   id: "",
@@ -27,6 +27,7 @@ const initialProduct = {
   is_enabled: false,
   imageUrl: "",
   imagesUrl: [],
+  evaluate: ""
 }
 
 
@@ -45,6 +46,8 @@ function App() {
   const [tempProduct, setTempProduct] = useState(initialProduct);
   const [modalType, setModalType] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [pagination, setPagination] = useState({});
+
   const productModalRef = useRef(null);
 
 
@@ -90,6 +93,7 @@ function App() {
 
   const closeModel = () => {
     productModalRef.current.hide()
+    setTempProduct(initialProduct);
   }
 
   useEffect(() => {
@@ -132,25 +136,28 @@ function App() {
   // 登出
   const checkLogout = async () => {
     try {
-
       const response = await axios.post(`${API_BASE}/logout`);
       setFormData(initialFormData);
       setIsAuth(false);
-      products([]);
+      setProducts([]);
     } catch (error) {
       setHasLoginMessage('請輸入帳號密碼進行登入');
     }
   }
 
 
-  const getProducts = async () => {
+  const getProducts = async (page = 1, category = '') => {
     setIsLoading(true);
     try {
-
-      const response = await axios.get(`${API_BASE}/api/${API_PATH}/admin/products`);
+      const response = await axios.get(`${API_BASE}/api/${API_PATH}/admin/products`, {
+        params: {
+          page,
+          category,
+        },
+      });
+      setTempProduct(initialProduct);
       setProducts(response.data.products);
-
-
+      setPagination(response.data.pagination);
     } catch (error) {
       showError(error.response)
     } finally {
@@ -158,22 +165,44 @@ function App() {
     }
   }
 
+  const upLoadImage = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) {
+      return;
+    }
+
+    try {
+      const formData = new FormData()
+      formData.append('file-to-upload', file)
+
+      const response = await axios.post(`${API_BASE}/api/${API_PATH}/admin/upload`, formData)
+      setTempProduct((pre) => ({
+        ...pre,
+        imageUrl: response.data.imageUrl
+      }))
+
+    } catch (error) {
+      console.log(error.response)
+    }
 
 
 
 
-  const updataProduct = async (id) => {
+  };
+
+
+
+
+  const updateProduct = async (id) => {
     setIsLoading(true);
     let url = `${API_BASE}/api/${API_PATH}/admin/product`
     let method = 'post'
+    let page = 1
 
     if (modalType === 'edit') {
       url = `${API_BASE}/api/${API_PATH}/admin/product/${id}`
       method = 'put'
-    }
-    if (modalType === 'delete') {
-      url = `${API_BASE}/api/${API_PATH}/admin/product/${id}`
-      method = 'delete'
+      page = pagination.current_page
     }
 
     const productData = {
@@ -189,6 +218,22 @@ function App() {
     try {
       const response = await axios[method](url, productData);
       showError(response.data.message);
+      getProducts(page);
+      closeModel();
+    } catch (error) {
+      showError(error.response.data.message)
+
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+
+  const deleteProduct = async (id) => {
+    setIsLoading(true);
+    try {
+      const response = await axios.delete(`${API_BASE}/api/${API_PATH}/admin/product/${id}`);
+      showError(response.data.message);
       getProducts();
       closeModel();
     } catch (error) {
@@ -198,11 +243,34 @@ function App() {
       setIsLoading(false);
     }
 
-
   }
 
 
+  const copyProduct = async () => {
+    setIsLoading(true);
 
+    const productData = {
+      data: {
+        ...tempProduct,
+        origin_price: tempProduct.origin_price * 1,
+        price: tempProduct.price * 1,
+        is_enabled: tempProduct.is_enabled ? 1 : 0,
+        imagesUrl: [...tempProduct.imagesUrl.filter((url) => url !== "")]
+      }
+    }
+
+    try {
+      const response = await axios.post(`${API_BASE}/api/${API_PATH}/admin/product`, productData);
+      showError(response.data.message);
+      getProducts();
+      closeModel();
+    } catch (error) {
+      showError(error.response.data.message)
+
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
 
 
@@ -262,6 +330,11 @@ function App() {
 
   }
 
+
+  const chengePage = (e) => {
+    getProducts(e.page);
+  }
+
   return (
     <>
       {!isAuth ? (<div className="container login">
@@ -304,7 +377,7 @@ function App() {
             </form>
           </div>
         </div >
-        <p className="mt-5 mb-3 text-muted">本網站為六角學院教學成果展示用，內容皆為模擬非真實資訊，內容請勿轉載。</p>
+        <Footer />
       </div >) : (
         <div className='container'>
           <div className='row'>
@@ -332,14 +405,15 @@ function App() {
           <div className="row mt-2">
 
             <h2 className="fw-bold">產品列表</h2>
-            <table className="table align-middle"> {/* align-middle 讓全列內容垂直置中 */}
+            <table className="table align-middle">
               <thead>
                 <tr>
                   <th scope="col">分類</th>
                   <th scope="col">產品名稱</th>
+                  <th scope="col">商品評價</th>
                   <th scope="col" className="text-end">原價</th>
                   <th scope="col" className="text-end">售價</th>
-                  <th scope="col" className="text-center">是否啟用</th> {/* 狀態置中較好看 */}
+                  <th scope="col" className="text-center">是否啟用</th>
                   <th scope="col" className="text-center">操作</th>
                 </tr>
               </thead>
@@ -348,6 +422,7 @@ function App() {
                   <tr key={item.id}>
                     <td>{item.category}</td>
                     <td>{item.title}</td>
+                    <td>{item.evaluate}</td>
                     <td className="text-end">{item.origin_price}</td>
                     <td className="text-end">{item.price}</td>
                     <td className="text-center">
@@ -379,263 +454,36 @@ function App() {
               </tbody>
             </table>
 
+            <Pagination pagination={pagination} chengePage={chengePage} />
 
 
           </div>
-          <div name="footer" className='text-center mt-3' >
-            本網站為六角學院教學成果展示用，內容皆為模擬非真實資訊，內容請勿轉載。
-          </div>
+          <Footer />
         </div >
 
 
       )}
-      < div className="modal fade" id="productModal" tabIndex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="productModalLabel" aria-hidden="true" ref={productModalRef}>
-        <div className="modal-dialog modal-xl">
-          <div className="modal-content border-0">
-            <div className={`modal-header bg-${modalType === 'delete' ? 'danger' : 'dark'} text-white`}>
-              <h5 id="productModalLabel" className="modal-title">
-                <span>{modalType === 'delete' ? '刪除' : (modalType === 'edit' ? '編輯' : '新增')}產品</span>
-              </h5>
-              <button
-                type="button"
-                className="btn-close btn-white"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-
-              ></button>
-            </div>
 
 
-            <div className="modal-body">
-              {
-                modalType === 'delete' ? (<p className="fs-4">
-                  確定要刪除
-                  <span className="text-danger">{tempProduct.title}</span>嗎？
-                </p>) : (
-                  <div className="row  text-start">
-                    <div className="col-sm-4">
-                      <div className="mb-2">
-                        <div className="mb-3">
-                          <label htmlFor="imageUrl" className="form-label">
-                            輸入主要圖片網址
-                          </label>
-                          <input
-                            type="text"
-                            id="imageUrl"
-                            name="imageUrl"
-                            className="form-control"
-                            placeholder="請輸入圖片連結"
-                            value={tempProduct.imageUrl}
-                            onChange={(e) => productInputChange(e)}
-                          />
-                        </div>
-                        {
-                          tempProduct.imageUrl && (
-                            <img className="img-fluid" src={tempProduct.imageUrl} alt="主圖" />
-                          )
-                        }
+      <ProductModal modalType={modalType}
+        tempProduct={tempProduct}
+        productModalRef={productModalRef}
+        closeModel={closeModel}
+        updateProduct={updateProduct}
+        deleteProduct={deleteProduct}
+        copyProduct={copyProduct}
+        productInputChange={productInputChange}
+        productImageChange={productImageChange}
+        addImage={addImage}
+        removeImage={removeImage}
+        upLoadImage={upLoadImage} />
 
-                      </div>
-                      <div>
-
-                        {
-                          tempProduct.imagesUrl.map((url, index) =>
-                          (
-                            <div key={index}>
-                              <label htmlFor="imageUrl" className="form-label">
-                                輸入圖片網址
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                value={url}
-                                placeholder={`圖片網址${index + 1}`}
-                                onChange={(e) => productImageChange(index, e.target.value)}
-                              />
-                              {
-                                url && <img
-                                  className="img-fluid"
-                                  src={url}
-                                  alt={`副圖${index + 1}`}
-                                />
-                              }
-
-                            </div>
-                          ))
-                        }
-                        {
-                          tempProduct.imagesUrl.length < 5 &&
-                          <button className="btn btn-outline-primary btn-sm d-block w-100" onClick={() => addImage()}>
-                            新增圖片
-                          </button>
-                        }
-
-
-                      </div>
-                      <div>
-                        {
-                          tempProduct.imagesUrl.length > 1 &&
-                          <button className="btn btn-outline-danger btn-sm d-block w-100" onClick={() => removeImage()}>
-                            刪除圖片
-                          </button>
-                        }
-
-                      </div>
-                    </div>
-                    <div className="col-sm-8 ">
-                      <div className="mb-3">
-                        <label htmlFor="title" className="form-label">標題</label>
-                        <input
-                          name="title"
-                          id="title"
-                          type="text"
-                          className="form-control"
-                          placeholder="請輸入標題"
-                          value={tempProduct.title}
-                          onChange={(e) => productInputChange(e)}
-                        />
-                      </div>
-
-                      <div className="row">
-                        <div className="mb-3 col-md-6">
-                          <label htmlFor="category" className="form-label">分類</label>
-                          <input
-                            name="category"
-                            id="category"
-                            type="text"
-                            className="form-control"
-                            placeholder="請輸入分類"
-                            value={tempProduct.category}
-                            onChange={(e) => productInputChange(e)}
-                          />
-                        </div>
-                        <div className="mb-3 col-md-6">
-                          <label htmlFor="unit" className="form-label">單位</label>
-                          <input
-                            name="unit"
-                            id="unit"
-                            type="text"
-                            className="form-control"
-                            placeholder="請輸入單位"
-                            value={tempProduct.unit}
-                            onChange={(e) => productInputChange(e)}
-                          />
-                        </div>
-                      </div>
-
-                      <div className="row">
-                        <div className="mb-3 col-md-6">
-                          <label htmlFor="origin_price" className="form-label">原價</label>
-                          <input
-                            name="origin_price"
-                            id="origin_price"
-                            type="number"
-                            min="0"
-                            className="form-control"
-                            placeholder="請輸入原價"
-                            value={tempProduct.origin_price}
-                            onChange={(e) => productInputChange(e)}
-                          />
-                        </div>
-                        <div className="mb-3 col-md-6">
-                          <label htmlFor="price" className="form-label">售價</label>
-                          <input
-                            name="price"
-                            id="price"
-                            type="number"
-                            min="0"
-                            className="form-control"
-                            placeholder="請輸入售價"
-                            value={tempProduct.price}
-                            onChange={(e) => productInputChange(e)}
-                          />
-                        </div>
-                      </div>
-                      <hr />
-
-                      <div className="mb-3">
-                        <label htmlFor="description" className="form-label">產品描述</label>
-                        <textarea
-                          name="description"
-                          id="description"
-                          className="form-control"
-                          placeholder="請輸入產品描述"
-                          value={tempProduct.description}
-                          onChange={(e) => productInputChange(e)}
-                        ></textarea>
-                      </div>
-                      <div className="mb-3">
-                        <label htmlFor="content" className="form-label">說明內容</label>
-                        <textarea
-                          name="content"
-                          id="content"
-                          className="form-control"
-                          placeholder="請輸入說明內容"
-                          value={tempProduct.content}
-                          onChange={(e) => productInputChange(e)}
-                        ></textarea>
-                      </div>
-                      <div className="mb-3">
-                        <div className="form-check">
-                          <input
-                            name="is_enabled"
-                            id="is_enabled"
-                            className="form-check-input"
-                            type="checkbox"
-                            checked={tempProduct.is_enabled}
-                            onChange={(e) => productInputChange(e)}
-
-                          />
-                          <label className="form-check-label" htmlFor="is_enabled">
-                            是否啟用
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  </div >
-                )
-              }
-
-
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-outline-secondary"
-                data-bs-dismiss="modal"
-                onClick={() => closeModel()}
-              >
-                取消
-              </button>
-              {
-                modalType === 'delete' ? (<button type="button" className="btn btn-danger" onClick={() => updataProduct(tempProduct.id)} >刪除</button>) : (<button type="button" className="btn btn-primary" onClick={() => updataProduct(tempProduct.id)} >確認</button>)
-              }
-
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {
-        isLoading && <div
-          className="position-fixed top-0 start-0 w-100 vh-100 d-flex justify-content-center align-items-center bg-warning"
-          style={{ zIndex: 9999 }}
-        >
-          <div className="text-center">
-            <div className="spinner-border text-dark" role="status"></div>
-            <h2 className="mt-2">處理中，請稍候...</h2>
-          </div>
-        </div>
-      }
-
-
+      <Loading isLoading={isLoading} />
 
     </>
 
 
   )
 }
-
-
 
 export default App
