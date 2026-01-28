@@ -1,0 +1,328 @@
+/* ================= 基礎變數 / 地基 ================= */
+
+:root {
+  --unos-yellow: #f5c518;
+  --dark: #0f0f0f;
+  --surface-alt: #f8f8f8;
+  --text-main: #1d1d1f;
+  --text-muted: #86868b; /* 稍微淺一點的 Apple 灰 */
+  --transition: all 0.5s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: "SF Pro Display", "PingFang TC", "Heiti TC", sans-serif;
+  line-height: 1.8;
+  color: var(--text-main);
+  background: #fff;
+}
+
+section {
+  padding: clamp(100px, 15vw, 160px) 8vw; /* 增加上下留白，更有呼吸感 */
+}
+
+/* ================= HERO – 高級感重塑 ================= */
+
+.hero {
+  min-height: 100vh;
+  /* 增加一個稍微深一點的層次，讓文字更好讀 */
+  background:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7)),
+    url("https://images.unsplash.com/photo-1637603460319-ca8db4cccb06") center /
+      cover no-repeat fixed;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: clamp(3.2rem, 10vw, 6rem);
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.12em; /* 中文黃金字距 */
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.hero p {
+  font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+  max-width: 600px;
+  margin-bottom: 3.5rem;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  opacity: 0.85;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.hero-actions button {
+  padding: 1.1rem 3rem;
+  border-radius: 4px; /* 這裡改為微圓角，比全圓角更有「設計師選物」的硬挺感 */
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: none;
+  background: var(--unos-yellow);
+  color: var(--dark);
+  transition: var(--transition);
+}
+
+.hero-actions .outline {
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(5px); /* 加入微弱的毛玻璃效果 */
+}
+
+.hero-actions button:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  filter: brightness(1.1);
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 2.4rem;
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+.btn.primary {
+  background: var(--unos-yellow);
+  color: var(--dark);
+}
+
+.btn.primary:hover {
+  transform: translateY(-4px);
+}
+
+/* ================= ABOUT – 留白美學 ================= */
+
+.about {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.about h2 {
+  font-size: 2rem;
+  margin-bottom: 3.5rem;
+  font-weight: 700;
+  position: relative;
+}
+
+/* 裝飾線：增加細節質感 */
+.about h2::after {
+  content: "";
+  display: block;
+  width: 50%;
+  height: 4px;
+  background: var(--unos-yellow);
+  margin: 10px auto 0;
+}
+
+.about p {
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+/* ================= FEATURES – 非對稱現代排版 ================= */
+
+.features {
+  max-width: 1200px; /* 縮小一點，讓左右留白更多，更有呼吸感 */
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8rem, 15vw, 12rem); /* 動態大間距 */
+}
+
+.feature-row {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr); /* 使用 12 欄位系統，精準控制比例 */
+  align-items: center;
+}
+
+/* --- 圖片容器 --- */
+.feature-image {
+  grid-column: 1 / span 7; /* 預設佔據左側 7 欄 */
+  position: relative;
+  border-radius: 4px; /* 改為極小圓角，更顯硬挺高端 */
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.08); /* 柔和的深陰影 */
+}
+
+.feature-image img {
+  width: 100%;
+  aspect-ratio: 4 / 3; /* 改用比例控制，比固定高度更靈活 */
+  object-fit: cover;
+  display: block;
+  transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.feature-row:hover .feature-image img {
+  transform: scale(1.05); /* 懸浮微縮放 */
+}
+
+/* --- 文字容器 --- */
+.feature-text {
+  grid-column: 9 / span 4; /* 文字佔據右側，與圖片中間空出 1 欄 */
+  z-index: 2;
+}
+
+/* --- 反向排版的處理 (簡潔優雅) --- */
+.feature-row.reverse .feature-image {
+  grid-column: 6 / span 7; /* 圖片移到右側 */
+}
+
+.feature-row.reverse .feature-text {
+  grid-column: 1 / span 4; /* 文字移到左側 */
+  grid-row: 1; /* 確保與圖片在同一行 */
+}
+
+/* --- 文字細節優化 --- */
+.feature-text h3 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+/* 序號裝飾：質感小物電商常用的手法 */
+.feature-text h3::before {
+  content: "Selected 0" counter(feature-counter);
+  counter-increment: feature-counter;
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--unos-yellow);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.2em;
+}
+
+.features {
+  counter-reset: feature-counter;
+} /* 初始化序號 */
+
+.feature-text p {
+  font-size: 1rem;
+  line-height: 2;
+  color: var(--text-muted);
+  text-align: justify; /* 中文對齊 */
+}
+
+/* --- RWD 響應式優化 --- */
+@media (max-width: 1024px) {
+  .feature-row,
+  .feature-row.reverse {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .feature-image {
+    width: 100%;
+    border-radius: 12px;
+  }
+
+  .feature-text {
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+}
+
+/* ================= PRODUCTS – 乾淨陳列 ================= */
+
+.products {
+  background: var(--surface-alt);
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.product-card {
+  aspect-ratio: 1 / 1;
+  background: #fff;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ccc;
+  border: 1px solid transparent;
+  flex: 0 0 300px;
+  transition: var(--transition);
+}
+
+.product-card:hover {
+  transform: translateY(-10px);
+  border-color: #ddd;
+  box-shadow: 0 260px 260px rgba(0, 0, 0, 0.1);
+}
+
+.marquee {
+  overflow: hidden;
+}
+
+.track {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  animation: scrollLeft 25s linear infinite;
+}
+
+.marquee:hover .track {
+  animation-play-state: paused;
+}
+
+@keyframes scrollLeft {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ================= CLOSING – 柔和收尾 ================= */
+
+.closing {
+  background: var(--dark);
+  color: white;
+  text-align: center;
+  padding: 180px 8vw; /* 加大收尾的氣勢 */
+}
+
+.closing h2 {
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  margin-bottom: 2rem;
+  letter-spacing: 0.15em;
+  font-weight: 300; /* 輕盈的字體更有質感 */
+}
+
+.closing p {
+  max-width: 600px;
+  margin: 0 auto;
+  color: #666;
+  font-size: 1rem;
+  line-height: 2;
+}

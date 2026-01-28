@@ -1,0 +1,102 @@
+:root {
+  --unos-yellow: #ffd700;
+  --unos-dark: #222110;
+  --unos-light: #f8f8f5;
+  --unos-white: #fff;
+  --unos-delete: #dc3545;
+  --unos-delete-hover: #dc3545b3;
+  --unos-delete-success: #ffd700;
+  --unos-delete-error: #dc3545;
+  --unos-delete-info: #0d6efd;
+} /* 2. 通用與佈局樣式 */
+
+body {
+  font-family: "PingFang TC", "Heiti TC", "Microsoft JhengHei", sans-serif;
+  color: var(--unos-dark);
+  height: 100%;
+  background-color: var(--unos-light);
+}
+
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+}
+
+img {
+  object-fit: contain;
+  max-width: 100%;
+}
+
+.primary-image {
+  height: 300px;
+}
+
+.images {
+  height: 150px;
+}
+
+.tracking-widest {
+  letter-spacing: 0.2rem;
+}
+/* 3. 背景與按鈕顏色 */
+.bg-yellow {
+  background-color: var(--unos-yellow) !important;
+}
+.btn-yellow {
+  background-color: var(--unos-yellow);
+  color: #000;
+  font-weight: 500;
+  border: none;
+  border-radius: 0; /* 簡約直角設計 */
+  transition: all 0.3s ease;
+}
+.btn-yellow:hover {
+  background-color: var(--unos-yellow);
+  color: var(--dark);
+}
+
+.btn-delete {
+  background-color: var(--unos-delete);
+  color: var(--unos-white);
+  font-weight: 500;
+  border: none;
+  border-radius: 0; /* 簡約直角設計 */
+  transition: all 0.3s ease;
+}
+.btn-delete:hover {
+  background-color: var(--unos-delete-hover);
+  color: var(--unos-white);
+}
+
+/* 4. 導航與互動效果 */
+.hover-delete:hover {
+  color: var(--unos-yellow) !important;
+}
+.product-card {
+  transition: transform 0.3s ease;
+}
+.product-card:hover {
+  transform: translateY(-5px);
+}
+.opacity-hover {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.product-card:hover .opacity-hover {
+  opacity: 1;
+}
+
+/* 5. 頁尾樣式 */
+footer a:hover {
+  color: var(--unos-yellow) !important;
+}

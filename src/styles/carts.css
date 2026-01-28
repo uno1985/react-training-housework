@@ -1,0 +1,45 @@
+/* 數量控制容器 */
+.qty-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #e5e5e5;
+  border-radius: 999px;
+  padding: 4px 10px;
+  background-color: #fff;
+}
+
+/* + / - 按鈕 */
+.btn-qty {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background-color: #f5f5f5;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #333;
+}
+
+/* hover 效果 */
+.btn-qty:hover {
+  background-color: var(--unos-yellow);
+  color: #fff;
+}
+
+/* active 點擊感 */
+.btn-qty:active {
+  transform: scale(0.92);
+}
+
+/* 數字 */
+.qty-number {
+  min-width: 24px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 14px;
+  color: #222;
+}

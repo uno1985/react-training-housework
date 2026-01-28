@@ -1,0 +1,50 @@
+.navbar-brand {
+  letter-spacing: 0.2em;
+}
+
+.logo {
+  width: 30px;
+  margin-right: 3px;
+}
+.logoTitle {
+  font-family: sans-serif;
+  font-weight: bold;
+  font-size: 30px;
+  letter-spacing: 0em;
+}
+#navbarNav {
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+.nav-item {
+  padding: 0 20px;
+}
+
+.nav-link {
+  position: relative;
+  padding: 8px 14px;
+  text-decoration: none;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 2px;
+  width: 0;
+  height: 5px;
+  transform: translateX(-50%);
+  transition: width 0.25s ease;
+}
+
+/* hover */
+.nav-link:hover::after {
+  background-color: var(--unos-dark);
+  width: 100%;
+}
+
+/* 正在連結 */
+.nav-link.active::after {
+  background-color: var(--unos-yellow);
+  width: 100%;
+}
