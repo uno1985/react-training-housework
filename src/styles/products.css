@@ -14,7 +14,8 @@
   display: grid;
   align-items: center;
   justify-content: center;
-  padding: 0.9rem 2.4rem;
+  padding: 5px 5px;
+  width: 100%;
   border-radius: 10px;
   font-weight: 400;
   letter-spacing: 0.12em;
@@ -25,4 +26,25 @@
 }
 .moreLink:hover {
   color: black;
+}
+
+.btn-groups {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+}
+
+.btn-qty-modal {
+  padding: 3pt 15pt;
+  font-size: 16pt;
+  font-weight: 900;
+  line-height: 2;
+  border-radius: 5pt;
+  color: #fff;
+}
+.btn-qty-remove {
+  background-color: var(--unos-delete-success);
+}
+.btn-qty-add {
+  background-color: #000;
 }

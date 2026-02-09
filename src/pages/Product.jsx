@@ -4,6 +4,7 @@ import { useParams, useOutletContext, useNavigate } from "react-router";
 import { useMsg } from "../context/MsgContext";
 import '../styles/product.css'
 import { formatNumber } from "../utils/formatNumber";
+import { Hearts } from "react-loader-spinner";
 
 const API_BASE = import.meta.env.VITE_API_BASE;
 const API_PATH = import.meta.env.VITE_API_PATH;
@@ -15,7 +16,7 @@ const Product = () => {
     const [productImg, setProductImg] = useState(null)
     const { setCartTrigger } = useOutletContext();
     const navigate = useNavigate();
-
+    const [isLoading, setIsLoading] = useState(false);
     const { showMsg } = useMsg();
 
     const { id } = params;
@@ -28,44 +29,35 @@ const Product = () => {
                 const response = await axios.get(`${API_BASE}/api/${API_PATH}/product/${id}`)
                 setProduct(response.data.product)
                 setProductImg(response.data.product.imageUrl)
-
-
             } catch (error) {
                 showMsg("網站出錯請重新整理網頁", "error");
             }
-
         }
         getProduct();
     }, [])
 
     const joinCart = async (id) => {
+        setIsLoading(true);
         const data = {
             data: {
                 product_id: id,
                 qty: 1
             }
-
         }
         try {
             const response = await axios.post(`${API_BASE}/api/${API_PATH}/cart`, data)
-
             setCartTrigger(prev => prev + 1);
             showMsg(response.data.message, "success");
-            navigate('/carts')
-
-
         } catch (error) {
             showMsg("網站出錯請重新整理網頁", "error");
+        } finally {
+            setTimeout(() => {
+                setIsLoading(false);
+                navigate('/carts')
+            }, 2000);
         }
     }
-
-
-
-
     return (<>
-
-
-
         <nav className="breadcrumb-unos">
             <span>{product.category}</span>
             <span className="sep">/</span>
@@ -73,7 +65,6 @@ const Product = () => {
         </nav>
         <div className="container mt-2">
             <div className="row g-4">
-
                 <div className="col-12 col-md-6">
                     <div>
                         <img
@@ -100,16 +91,10 @@ const Product = () => {
                                     className="img-fluid rounded thumbnail"
                                     key={index}
                                     onClick={() => setProductImg(item)}
-
                                 />
-                            ))
-                        }
-
+                            ))}
                     </div>
-
-
                 </div>
-
                 <div className="col-12 col-md-6">
                     <p className="mb-2 badge categoryColor">
                         {product.category}
@@ -122,20 +107,20 @@ const Product = () => {
                     <p className="text-muted mb-2">
                         售價：<del>{formatNumber(product.origin_price)}</del>
                     </p>
-
                     <h4 className="text-danger fw-bold mb-4">
-                        NT$ {formatNumber(product.price)}
+                        限時壓倒價：NT$ {formatNumber(product.price)}
                     </h4>
-
                     <p className="product-description mb-4">
                         {product.description}
                     </p>
-
                     <div className="d-flex gap-3">
-                        <button className="btn btn-yellow px-4" onClick={() => joinCart(product.id)}>
-                            加入購物車
+                        <button className="btn btn-yellow px-4" onClick={() => joinCart(product.id)} disabled={isLoading}>
+                            {isLoading ? (
+                                <Hearts height="20" width="40" color="#ffffff" />
+                            ) : (
+                                '加入購物車'
+                            )}
                         </button>
-
                     </div>
                 </div>
             </div>
@@ -143,7 +128,6 @@ const Product = () => {
         <div className="content mt-4">
             <h3>產品資訊</h3>
             <p className="product-content">{product.content}</p>
-
         </div>
 
 

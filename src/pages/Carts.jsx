@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import { useForm } from "react-hook-form"
 import { useMsg } from "../context/MsgContext";
 import { formatNumber } from "../utils/formatNumber";
+import { FallingLines } from "react-loader-spinner";
 
 import '../styles/carts.css'
 
@@ -281,7 +282,7 @@ const StepInfo = ({ onPrev, changeOrderVisitor, register, handleSubmit, cart, er
 // ==========================================
 // Step 3：確認訂單
 // ==========================================
-const StepPayment = ({ onPrev, cart, orderVisitor, sendNewOrder }) => {
+const StepPayment = ({ onPrev, cart, orderVisitor, sendNewOrder, isLoading }) => {
     return (
         <div className="checkout-content">
             <h3 className="fw-bold mb-4">確認訂單與付款</h3>
@@ -358,7 +359,9 @@ const StepPayment = ({ onPrev, cart, orderVisitor, sendNewOrder }) => {
             {/* 按鈕 */}
             <div className="checkout-actions mt-4">
                 <button className="btn btn-outline-secondary" onClick={onPrev}>上一步</button>
-                <button className="btn btn-yellow px-5" onClick={() => sendNewOrder()}>確認訂單</button>
+                <button className="btn btn-yellow px-5" onClick={() => sendNewOrder()}>{isLoading ? (
+                    <FallingLines height="30" width="30" color="#ffffff" />
+                ) : ('確認訂單')}</button>
             </div>
         </div>
     )
@@ -423,6 +426,8 @@ const Carts = () => {
     const { showMsg } = useMsg();
     const [orderVisitor, setOrderVisitor] = useState(null);
     const [orderInfo, setOrderInfo] = useState(null);
+    const [loadingIds, setLoadingIds] = useState({})
+    const [isLoading, setIsLoading] = useState(false);
 
     const {
         register,
@@ -443,7 +448,7 @@ const Carts = () => {
 
     })
 
-    const [loadingIds, setLoadingIds] = useState({})
+
 
     useEffect(() => {
         getCart()
@@ -490,8 +495,10 @@ const Carts = () => {
         } catch (error) {
             showMsg("刪除商品失敗", "error");
 
+        } finally {
+            stopLoading(id)
         }
-        stopLoading(id)
+
     }
 
     const delAllProduct = async () => {
@@ -522,8 +529,9 @@ const Carts = () => {
         } catch (error) {
 
             showMsg("加入資料失敗", "error");
+        } finally {
+            stopLoading(id)
         }
-        stopLoading(id)
     }
 
     const changeOrderVisitor = (data) => {
@@ -532,7 +540,7 @@ const Carts = () => {
     }
 
     const sendNewOrder = async () => {
-
+        setIsLoading(true);
         try {
             const data = {
                 data: {
@@ -543,9 +551,14 @@ const Carts = () => {
             const response = await axios.post(`${API_BASE}/api/${API_PATH}/order/`, data)
             showMsg(response.data.message, "success");
             setOrderInfo(response.data)
-            setStep(4)
+
         } catch (error) {
             showMsg("訂單生成錯誤", "error");
+        } finally {
+            setTimeout(() => {
+                setIsLoading(false);
+                setStep(4)
+            }, 5000);
         }
     }
 
@@ -585,6 +598,7 @@ const Carts = () => {
                 cart={cart}
                 orderVisitor={orderVisitor}
                 sendNewOrder={sendNewOrder}
+                isLoading={isLoading}
 
                 onPrev={() => setStep(2)} />}
             {step === 4 && <StepComplete
