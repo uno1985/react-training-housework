@@ -1,0 +1,148 @@
+/* ================= SITE FOOTER ================= */
+
+.site-footer {
+  background: #0f0f0f;
+  color: #999;
+  padding-top: clamp(60px, 10vw, 100px);
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+
+/* ---- 品牌區 ---- */
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.footer-brand-name {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.15em;
+}
+
+.footer-desc {
+  color: #666;
+  margin-bottom: 1.5rem;
+  line-height: 1.9;
+}
+
+/* ---- 社群圖示 ---- */
+.footer-social {
+  display: flex;
+  gap: 1rem;
+}
+
+.footer-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #333;
+  color: #999;
+  transition: all 0.3s ease;
+}
+
+.footer-social a:hover {
+  color: #0f0f0f;
+  background: var(--unos-yellow, #f5c518);
+  border-color: var(--unos-yellow, #f5c518);
+  transform: translateY(-3px);
+}
+
+/* ---- 標題 ---- */
+.footer-title {
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+/* ---- 連結列表 ---- */
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin-bottom: 0.6rem;
+}
+
+.footer-links a {
+  color: #666;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: var(--unos-yellow, #f5c518);
+}
+
+/* ---- 聯絡資訊 ---- */
+.footer-contact {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-contact li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  color: #666;
+}
+
+.footer-contact svg {
+  flex-shrink: 0;
+  margin-top: 0.3rem;
+  color: var(--unos-yellow, #f5c518);
+}
+
+/* ---- 底部版權 ---- */
+.footer-bottom {
+  margin-top: clamp(40px, 8vw, 70px);
+  padding: 1.5rem 0;
+  border-top: 1px solid #1a1a1a;
+  text-align: center;
+}
+
+.footer-disclaimer {
+  color: #555;
+  font-size: 0.8rem;
+  margin-bottom: 0.25rem;
+}
+
+.footer-copyright {
+  color: #444;
+  font-size: 0.75rem;
+  margin: 0;
+  letter-spacing: 0.05em;
+}
+
+/* ---- RWD ---- */
+@media (max-width: 768px) {
+  .site-footer {
+    padding-top: 50px;
+  }
+
+  .footer-brand {
+    justify-content: center;
+  }
+
+  .footer-desc {
+    text-align: center;
+  }
+
+  .footer-social {
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+}

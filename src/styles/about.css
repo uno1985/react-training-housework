@@ -1,0 +1,291 @@
+/* ================= ABOUT PAGE ================= */
+/* 風格延續 home.css 的設計語言 */
+
+/* ---- 通用標籤 ---- */
+.about-label {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--unos-yellow, #f5c518);
+  margin-bottom: 1rem;
+}
+
+/* ---- HERO ---- */
+.about-hero {
+  min-height: 60vh;
+  background:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.65)),
+    url("https://images.unsplash.com/photo-1618221195710-dd6b41faaea6") center / cover no-repeat;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 120px 2rem;
+}
+
+.about-hero h1 {
+  font-size: clamp(2.8rem, 8vw, 5rem);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  margin-bottom: 1rem;
+  text-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.about-hero p {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  font-weight: 300;
+  opacity: 0.85;
+  letter-spacing: 0.08em;
+}
+
+/* ---- 品牌理念 ---- */
+.about-philosophy {
+  padding: clamp(80px, 12vw, 140px) 2rem;
+}
+
+.about-philosophy h2 {
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.about-philosophy p {
+  color: #86868b;
+  font-size: 1.05rem;
+  line-height: 2;
+  margin-bottom: 1rem;
+}
+
+.about-img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+}
+
+/* ---- 數據亮點 ---- */
+.about-stats {
+  background: #0f0f0f;
+  color: white;
+  padding: clamp(60px, 10vw, 100px) 2rem;
+}
+
+.stat-number {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  color: var(--unos-yellow, #f5c518);
+  margin-bottom: 0.5rem;
+}
+
+.stat-desc {
+  font-size: 0.9rem;
+  color: #999;
+  letter-spacing: 0.1em;
+}
+
+/* ---- 品牌價值 ---- */
+.about-values {
+  padding: clamp(80px, 12vw, 140px) 2rem;
+  background: #f8f8f8;
+}
+
+.about-values h2 {
+  font-size: clamp(1.8rem, 4vw, 2.2rem);
+  font-weight: 700;
+}
+
+.value-card {
+  padding: 2.5rem 2rem;
+  background: white;
+  height: 100%;
+  border-radius: 4px;
+  transition: all 0.4s ease;
+  border: 1px solid transparent;
+}
+
+.value-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+  border-color: var(--unos-yellow, #f5c518);
+}
+
+.value-icon {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--unos-yellow, #f5c518);
+  margin-bottom: 1.5rem;
+  line-height: 1;
+}
+
+.value-card h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.value-card p {
+  color: #86868b;
+  font-size: 0.95rem;
+  line-height: 1.9;
+}
+
+/* ---- 團隊介紹 ---- */
+.about-team {
+  padding: clamp(80px, 12vw, 140px) 2rem;
+}
+
+.about-team h2 {
+  font-size: clamp(1.8rem, 4vw, 2.2rem);
+  font-weight: 700;
+}
+
+.team-card {
+  text-align: center;
+}
+
+.team-img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  filter: grayscale(30%);
+  transition: all 0.4s ease;
+}
+
+.team-img:hover {
+  filter: grayscale(0%);
+  transform: scale(1.03);
+}
+
+.team-card h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.team-card span {
+  font-size: 0.85rem;
+  color: #86868b;
+  letter-spacing: 0.05em;
+}
+
+/* ---- 時間軸 ---- */
+.about-timeline {
+  padding: clamp(80px, 12vw, 140px) 2rem;
+  background: #f8f8f8;
+}
+
+.about-timeline h2 {
+  font-size: clamp(1.8rem, 4vw, 2.2rem);
+  font-weight: 700;
+}
+
+.timeline {
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+  padding-left: 2rem;
+}
+
+/* 左側直線 */
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #ddd;
+}
+
+.timeline-item {
+  position: relative;
+  padding: 0 0 3rem 2rem;
+}
+
+/* 左側圓點 */
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: -2rem;
+  top: 0.35rem;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--unos-yellow, #f5c518);
+  border: 2px solid white;
+  transform: translateX(calc(-50% + 1px));
+}
+
+.timeline-year {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--unos-yellow, #f5c518);
+  letter-spacing: 0.15em;
+  margin-bottom: 0.5rem;
+}
+
+.timeline-content h4 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.timeline-content p {
+  color: #86868b;
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+/* ---- CTA 結尾 ---- */
+.about-cta {
+  background: #0f0f0f;
+  color: white;
+  text-align: center;
+  padding: clamp(100px, 15vw, 160px) 2rem;
+}
+
+.about-cta h2 {
+  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.about-cta p {
+  color: #666;
+  font-size: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.about-cta .btn.primary {
+  background: var(--unos-yellow, #f5c518);
+  color: #0f0f0f;
+}
+
+.about-cta .btn.primary:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(245, 197, 24, 0.3);
+}
+
+/* ---- RWD ---- */
+@media (max-width: 768px) {
+  .about-hero {
+    min-height: 45vh;
+  }
+
+  .timeline {
+    padding-left: 1.5rem;
+  }
+
+  .timeline-item {
+    padding-left: 1.5rem;
+  }
+}

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams, useOutletContext } from "react-router";
+import { useParams, useOutletContext, useNavigate } from "react-router";
 import { useMsg } from "../context/MsgContext";
 import '../styles/product.css'
 import { formatNumber } from "../utils/formatNumber";
@@ -14,6 +14,7 @@ const Product = () => {
     const [product, setProduct] = useState([])
     const [productImg, setProductImg] = useState(null)
     const { setCartTrigger } = useOutletContext();
+    const navigate = useNavigate();
 
     const { showMsg } = useMsg();
 
@@ -50,6 +51,8 @@ const Product = () => {
 
             setCartTrigger(prev => prev + 1);
             showMsg(response.data.message, "success");
+            navigate('/carts')
+
 
         } catch (error) {
             showMsg("網站出錯請重新整理網頁", "error");

@@ -7,6 +7,9 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './styles/style.css'
 
 import { MsgProvider } from "./context/MsgContext";
+import { AuthProvider } from "./context/AuthContext";
+
+
 
 // react-router相關檔案
 import { createHashRouter, RouterProvider } from 'react-router';
@@ -17,7 +20,11 @@ const router = createHashRouter(routes)
 
 createRoot(document.getElementById('root')).render(
   <MsgProvider>
-    <RouterProvider router={router} />
+    <AuthProvider>
+
+      <RouterProvider router={router} />
+
+    </AuthProvider>
   </MsgProvider>
 
 )

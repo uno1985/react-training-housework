@@ -4,8 +4,14 @@ import About from "../pages/About"
 import Products from "../pages/Products"
 import Carts from "../pages/carts"
 import ProductsLayout from "../layout/ProductsLayout"
+import AdminLayout from "../layout/AdminLayout"
 import Product from "../pages/Product"
+import EditProducts from "../pages/EditProducts"
+import Coupon from "../pages/Coupon"
+import Orders from "../pages/Orders"
+import Service from "../pages/Service"
 
+import { Navigate } from "react-router"
 
 
 const routes = [
@@ -21,6 +27,35 @@ const routes = [
             {
                 path: '/about',
                 element: <About />
+
+            },
+            {
+                path: '/service',
+                element: <Service />
+            },
+            {
+                path: '/admin',
+                element: <AdminLayout />,
+                children: [
+                    {
+                        index: true,
+                        element: <Navigate to="orders" replace />
+                    },
+                    {
+
+                        path: 'orders',
+                        element: <Orders />
+                    },
+                    {
+                        path: 'editproducts',
+                        element: <EditProducts />
+                    },
+                    {
+                        path: 'coupon',
+                        element: <Coupon />
+                    },
+
+                ]
 
             },
             {

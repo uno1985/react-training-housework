@@ -1,9 +1,13 @@
 import { Link, NavLink } from "react-router"
 import '../styles/navbar.css'
 import { useEffect } from "react"
+import { useAuth } from "../context/AuthContext"
+
+
 
 const Navbar = () => {
 
+    const { loading } = useAuth();
 
 
 
@@ -56,6 +60,13 @@ const Navbar = () => {
                                 isActive ? "nav-link active" : "nav-link"
                             } to="/carts">
                                 購物車
+                            </NavLink>
+                        </li>
+                        <li className="nav-item">
+                            <NavLink className={({ isActive }) =>
+                                isActive ? "nav-link active" : "nav-link"
+                            } to="/admin">
+                                後台管理
                             </NavLink>
                         </li>
                     </ul>
